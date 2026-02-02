@@ -8,13 +8,15 @@ export function getDefaultCommonState() {
 		navigationBarHeight: 0,
 		// 胶囊信息
 		capsuleMessage: {},
-		templateType: 'template_one',
+		templateType: 'template_two',
 		// 开发环境： http://blink.blinktech.cn/nblink
 		// 测试环境：http://show.blinktech.cn/nblink
 		// 准生产环境：http://ver.blinktech.cn/nblink
 		// 生产环境：http://blinktech.cn/nblink
 		// 新测试环境  http://act.blinktech.cn/nblink
-		baseURL: 'http://ver.blinktech.cn'
+		baseURL: 'http://ver.blinktech.cn',
+		depId: '',
+		proId: ''
 	}
 }
 
@@ -37,7 +39,9 @@ export function getDefaultTransTaskSchedulingState() {
 		// 暂存创建调度任务的信息
 		temporaryStorageCreateDispathTaskMessage: {},
 		// 暂存创建预约任务的信息
-		temporaryStorageCreateAppointTaskMessage: {}
+		temporaryStorageCreateAppointTaskMessage: {},
+		//运送类型信息
+		transParentMessage: {}
 	}
 }
 

@@ -90,9 +90,9 @@
     </van-dialog>
     </div>
     <!-- 运送大类 -->
-    <div class="transport-rice-box" v-if="showTransportRice">
+    <!-- <div class="transport-rice-box" v-if="showTransportRice">
       <ScrollSelection :columns="transportRiceList" :pickerValues="transportRiceDefaultIndex" title="运送大类" @sure="transportRiceSureEvent" @cancel="transportRiceCancelEvent" @close="transportRiceCloseEvent" />
-    </div>
+    </div> -->
     <!-- 起点科室 -->
     <div class="transport-rice-box" v-if="showStartDepartment">
       <ScrollSelection :columns="startDepartmentList" :pickerValues="startDepartmentDefaultIndex" title="起点科室" @sure="startDepartmentSureEvent" @cancel="startDepartmentCancelEvent" @close="startDepartmentCloseEvent" :isShowSearch="true"/>
@@ -106,9 +106,9 @@
       <BottomSelect :columns="goalSpacesOption" title="终点科室" :currentSelectData="currentGoalSpaces" @sure="goalSpacesSureEvent" @cancel="goalSpacesCancelEvent" @close="goalSpacesCloseEvent" :isShowSearch="true"/>
     </div>
     <!-- 运送员 -->
-    <div class="transport-rice-box" v-if="showTransporter">
+    <!-- <div class="transport-rice-box" v-if="showTransporter">
       <ScrollSelection :columns="transporterList" :pickerValues="transporterDefaultIndex" title="运送员" @sure="transporterSureEvent" @cancel="transporterCancelEvent" @close="transporterCloseEvent" />
-    </div>
+    </div> -->
     <!-- 转运工具 -->
     <div class="transport-rice-box" v-if="showTransportTool">
       <ScrollSelection :columns="transportToolList" :pickerValues="transportToolDefaultIndex" title="转运工具" @sure="transportToolSureEvent" @cancel="transportToolCancelEvent" @close="transportToolCloseEvent" />
@@ -119,7 +119,7 @@
     </div>
     <div class="nav">
        <van-nav-bar
-        title="创建调度任务"
+        :title="currentTransportRice"
         left-text=""
         :left-arrow="true"
         :placeholder="true"
@@ -144,13 +144,13 @@
             <div class="message-one-right">
               <van-radio-group v-model="priorityRadioValue" direction="horizontal">
                 <van-radio name="1" checked-color="#289E8E">正常</van-radio>
-                <van-radio name="2" checked-color="#E8CB51">紧急</van-radio>
-                <van-radio name="3" checked-color="#F2A15F">重要</van-radio>
+                <van-radio name="2" checked-color="#E8CB51">重要</van-radio>
+                <van-radio name="3" checked-color="#F2A15F">紧急</van-radio>
                 <van-radio name="4" checked-color="#E86F50">紧急重要</van-radio>
               </van-radio-group>
             </div>
           </div>
-          <div class="select-box">
+          <!-- <div class="select-box">
             <div class="select-box-left">
               <span>*</span>
               <span>运送大类</span>
@@ -159,7 +159,7 @@
               <span :class="{'selectBoxRightStyle': !transportPartentSelected}">{{ currentTransportRice }}</span>
               <van-icon name="arrow" :color="transportPartentSelected ? '#989999' : '#d6d6d6'" size="20" />
             </div>
-          </div>
+          </div> -->
           <div class="transport-type" v-if="templateType === 'template_one'">
             <div class="transport-type-left">
               <span>运送类型</span>
@@ -179,9 +179,9 @@
               <span>*</span>
               <span>起点科室</span>
             </div>
-            <div class="select-box-right" @click="showStartDepartment = true">
+            <div class="select-box-right">
               <span>{{ currentStartDepartment }}</span>
-              <van-icon name="arrow" color="#989999" size="20" />
+              <van-icon name="arrow" color="transparent" size="20" />
             </div>
           </div>
           <div class="message-one is-back task-total" v-if="templateType === 'template_two'">
@@ -201,7 +201,7 @@
               <van-icon name="arrow" color="#989999" size="20" />
             </div>
           </div>
-          <div class="select-box end-select-box">
+          <!-- <div class="select-box end-select-box">
             <div class="select-box-left">
               <span>运送员</span>
             </div>
@@ -209,7 +209,7 @@
               <span>{{ currentTransporter }}</span>
               <van-icon name="arrow" color="#989999" size="20" />
             </div>
-          </div>
+          </div> -->
           <div class="select-box end-select-box">
             <div class="select-box-left">
               <span>转运工具</span>
@@ -237,17 +237,17 @@
               </div>
             </div>
             <div class="patient-message-bottom patient-message-bottom-age">
+              <div class="patient-message-bottom-left">
+                <div class="select-box-left">
+                  <span>性别</span>
+                </div>
+                <div class="select-box-right" @click="showGender = true">
+                  <span :class="{'selectBoxRightStyle' : currentGender == '请选择'}">{{ currentGender }}</span>
+                  <van-icon name="arrow" color="#989999" size="20" />
+                </div>
+              </div>
               <div class="patient-message-bottom-right">
                 <van-field v-model="transportNumberValue" label="运送数量" type="digit" placeholder="请输入" />
-              </div>
-              <div class="contact-isolation-box">
-                <p>接触隔离</p>
-                <p>
-                  <van-radio-group v-model="isContactisolationValue" direction="horizontal" checked-color="#3B9DF9">
-                    <van-radio icon-size="14px" name="1">是</van-radio>
-                    <van-radio icon-size="14px" name="0">否</van-radio>
-                  </van-radio-group>
-                </p>
               </div>
             </div>
           </div>
@@ -309,23 +309,25 @@
               添加病人信息
             </div>
           </div>
-          <div class="select-box end-select-box" v-if="templateType === 'template_one'">
-            <div class="select-box-left">
-              <span>性别</span>
-            </div>
-            <div class="select-box-right" @click="showGender = true">
-              <span>{{ currentGender }}</span>
-              <van-icon name="arrow" color="#989999" size="20" />
-            </div>
+          <div class="message-one is-back">
+              <div class="message-one-left">
+                接触隔离
+              </div>
+              <div class="message-one-right">
+                <van-radio-group v-model="isContactisolationValue" direction="horizontal">
+                  <van-radio name="0" checked-color="#95e195">否</van-radio>
+                  <van-radio name="1" checked-color="orange">是</van-radio>
+                </van-radio-group>
+              </div>
           </div>
           <div class="message-one is-back">
             <div class="message-one-left">
               运送员是否返回
             </div>
             <div class="message-one-right">
-              <van-radio-group v-model="isBackRadioValue" direction="horizontal" checked-color="#3B9DF9">
-                <van-radio name="0">否</van-radio>
-                <van-radio name="1">是</van-radio>
+              <van-radio-group v-model="isBackRadioValue" direction="horizontal">
+                <van-radio name="0" checked-color="#95e195">否</van-radio>
+                <van-radio name="1" checked-color="orange">是</van-radio>
               </van-radio-group>
             </div>
           </div>
@@ -346,7 +348,7 @@
         </div>
         <div class="btn-box">
           <span class="operate-one" @click="getTransConfig">确认</span>
-          <span class="operate-three" @click="cancelEvent">取消</span>
+          <span class="operate-two" @click="cancelEvent">取消</span>
         </div>
       </div>
     </div> 
@@ -354,14 +356,13 @@
 </template>
 <script>
 import { mapGetters, mapMutations } from "vuex";
-import store from '@/store'
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction'
 import Ldselect from '@/components/Ldselect'
 import { generateDispatchTaskManyNew, queryTransConfig } from '@/api/trans/taskScheduling.js'
 import {queryAllDestination, queryTransportTypeClass, queryTransportTools, generateDispatchTask, getTransporter, queryTransportType } from '@/api/trans/medicalPort.js'
 import Vselect from '@/components/Vselect'
 import StepNumberBox from '@/components/StepNumberBox'
-import { setStore,removeAllLocalStorage, IsPC } from '@/common/js/utils'
+import { IsPC } from '@/common/js/utils'
 import _ from 'lodash'
 import ScrollSelection from "@/components/ScrollSelection";
 import BottomSelect from "@/components/BottomSelect";
@@ -390,7 +391,7 @@ export default {
       transportPartentSelected: true,
       isContactisolationValue: null,
       showStartDepartment: false,
-      currentStartDepartment: '请选择',
+      currentStartDepartment: '',
       startDepartmentDefaultIndex: 0,
       startDepartmentList: [],
       showEndDepartment: false,
@@ -407,7 +408,7 @@ export default {
       transportToolDefaultIndex: 0,
       transportToolList: [],
       showGender: false,
-      currentGender: '未选择',
+      currentGender: '请选择',
       genderDefaultIndex: '',
       genderList: [
         { 
@@ -494,7 +495,13 @@ export default {
         that.$router.push({path: '/'})
       })
     };
-    this.parallelFunction()
+    this.parallelFunction();
+    // 为当前页面运送大类赋值
+		this.currentTransportRice = this.transParentMessage['text'];
+		this.currentTransportRiceValue = this.transParentMessage['value'];
+		this.titleText = this.currentTransportRice;
+		// 根据运送大类查询运送类型小类
+		this.querytransportChildByTransportParent('',this.currentTransportRiceValue,this.templateType);
   },
 
   watch: {
@@ -515,29 +522,30 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["templateType"]),
+    ...mapGetters(["templateType","transParentMessage"]),
     userTypeId () {
       return 0
     },
     userName() {
       return ''
     },
+    depId() {
+      return 385
+    },
     workerId() {
       return 0
     },
-    proName () {},
-    proId() { 
+    proId() {
       return 7
     },
-    depId() {},
-    depName() {}
+    proName () {}
   },
 
   methods: {
     ...mapMutations(["changeTitleTxt"]),
 
     onClickLeft() {
-      this.$router.push({ path: "/"})
+      this.$router.push({ path: "/chooseTransPartentType"})
     },
 
     // 添加病人信息事件
@@ -874,7 +882,7 @@ export default {
                   value: item3[i].typeName
                 });
                 this.transportRiceList.push({
-                  text: item3[i].typeName,
+                  text: item3[i].typeName == '药、物、文书' ?  item3[i].typeName.replace(/、/g,'') : item3[i].typeName,
                   value: item3[i].id,
                   id: i
                 })
@@ -890,7 +898,9 @@ export default {
                   id: i
                 })
               }
-            }
+            };
+            // 为起点科室赋默认值
+		        this.currentStartDepartment = this.getDepartmentNameById(this.depId);
           }
         })
         .catch((err) => {
@@ -1164,6 +1174,11 @@ export default {
         return this.startDepartmentList.filter((item) => {return item['text'] == text })[0]['value']
       },
 
+      // 根据科室id获取科室名称
+      getDepartmentNameById(value) {
+        return this.startDepartmentList.filter((item) => {return item['value'] == value })[0]['text']
+      },
+
       // 根据运送员名称获取运送员id
       getCurrentTransporterIdByName(text) {
         return this.transporterList.filter((item) => {return item['text'] == text })[0]['value']
@@ -1260,7 +1275,7 @@ export default {
     sureEvent (flag) {
       if (this.templateType === 'template_one') {
         let taskMessage = {
-          setOutPlaceId: this.currentStartDepartment == '请选择' ? '' : this.getDepartmentIdByName(this.currentStartDepartment), //出发地ID
+          setOutPlaceId: this.currentStartDepartment == '请选择' ? '' : this.depId, //出发地ID
           setOutPlaceName: this.currentStartDepartment == '请选择' ? '' : this.currentStartDepartment,//出发地名称
           destinationId: this.currentEndDepartment == '请选择' ? '' : this.getDepartmentIdByName(this.currentEndDepartment), //目的地ID
           destinationName: this.currentEndDepartment == '请选择' ? '' : this.currentEndDepartment,  //目的地名称
@@ -1273,28 +1288,25 @@ export default {
           toolName: this.currentTransportTool, //运送工具名称
           actualCount: this.transportNumberValue,   //实际数量
           patientName: this.patientNameValue,  //病人姓名
-          sex: this.currentGender == '未选择' || this.currentGender == '未知' ? 0 : this.currentGender == '男' ? 1 : 2,    //病人性别  0-未指定,1-男, 2-女
+          sex: this.currentGender == '请选择' || this.currentGender == '未知' ? 0 : this.currentGender == '男' ? 1 : 2,    //病人性别  0-未指定,1-男, 2-女
           age: this.patientAgeValue,   //年龄
           number: this.admissionNumberValue,   //住院号
           bedNumber: this.patientNumberValue,  //床号
           taskRemark: this.taskDescribe,   //备注
           quarantine: this.isContactisolationValue === null ? -1 : this.isContactisolationValue,// 接触隔离
-          assignId: this.workerId,   //分配者ID  当前登录者
-          assignName: this.userName,   //分配者名称  当前登陆者
           createId: this.workerId,   //创建者ID  当前登录者
           createName: this.userName,   //创建者名称  当前登陆者
           proId: this.proId,   //项目ID
-          workerId: this.currentTransporter == '请选择' ? '' : this.currentTransporterValue, // 运送员ID
-          workerName: this.currentTransporter == '请选择' ? '' : this.currentTransporter, // 运送员姓名
           proName: this.proName,   //项目名称
           isBack: this.isBackRadioValue,  //是否返回出发地  0-不返回，1-返回
-          createType: 3 //创建类型   0-web端,1-手机端(医护),3-手机端(任务调度)
+          createType: 1, //创建类型   0-web端,1-手机端(医护),3-手机端(任务调度)
+          startTerminal: 1 // 发起客户端类型 1-安卓APP，2-微信小程序
         };
         // 创建调度任务
         this.postGenerateDispatchTask(taskMessage);
       } else if (this.templateType === 'template_two') {
         let taskMessageTwo = {
-          setOutPlaceId: this.getDepartmentIdByName(this.currentStartDepartment), //出发地ID
+          setOutPlaceId: this.depId, //出发地ID
           setOutPlaceName: this.currentStartDepartment, //出发地名称
           destinations: [],//多个目的地列表
           patientInfoList: [], //多个病人信息列表
@@ -1305,20 +1317,13 @@ export default {
           taskRemark: this.taskDescribe, //备注
           parentTypeId:  this.currentTransportRiceValue, //运送父类型Id
           parentTypeName: this.currentTransportRice,//运送父类型名称
-          taskTypeId: '',
-          taskTypeName: '',
           createId: this.workerId,   //创建者ID  当前登录者
           createName: this.userName,   //创建者名称  当前登陆者
-          modifyId: '', //修改者id
-          modifyName: '', //修改者姓名
-          originalWorkerId: '', // 原始运送员id
-          id: '', // 任务id
-          workerId: this.currentTransporter == '请选择' ? '' : this.currentTransporterValue, // 运送员id
-          workerName: this.currentTransporter == '请选择' ? '' : this.currentTransporter, // 运送员姓名
           proId: this.proId, //项目ID
           proName: this.proName, //项目名称
           isBack: this.isBackRadioValue, //是否返回出发地  0-不返回，1-返回
-          createType: 3 //创建类型   0-web端,1-手机端(医护),3-手机端(任务调度)
+          createType: 1, //创建类型   0-web端,1-手机端(医护),3-手机端(任务调度)
+          startTerminal: 1 // 发起客户端类型 1-安卓APP，2-微信小程序
         };
         // 处理多个终点科室信息
         if (this.currentGoalSpaces.length > 0) {
@@ -1392,7 +1397,7 @@ export default {
       generateDispatchTask(data).then((res) => {
         if (res && res.data.code == 200) {
           this.$toast({message: '创建成功',type: 'success'});
-          this.$router.push({ path: "/"})
+          this.$router.push({ path: "/chooseTransPartentType"})
         } else {
           this.$dialog.alert({
             message: `${res.data.msg}`,
@@ -1424,7 +1429,7 @@ export default {
       generateDispatchTaskManyNew(data).then((res) => {
         if (res && res.data.code == 200) {
           this.$toast({message: '创建成功',type: 'success'});
-          this.$router.push({ path: "/taskScheduling"})
+          this.$router.push({ path: "/chooseTransPartentType"})
         } else {
           this.$dialog.alert({
             message: `${res.data.msg}`,
@@ -1450,7 +1455,7 @@ export default {
 
     // 取消事件
     cancelEvent () {
-      this.$router.push({ path: "/"})
+      this.$router.push({ path: "/chooseTransPartentType"})
     }
   }
 };
@@ -2043,9 +2048,55 @@ export default {
               }
             };
             .patient-message-bottom-age {
+              display: flex;
+				    	align-items: center;
+              .patient-message-bottom-left {
+                width: 40%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin: 0 15px 0 10px;
+                .select-box-left {
+                  padding-right: 10px;
+                  box-sizing: border-box;
+                  >span {
+                    color: #9E9E9A;
+                    padding-right: 6px;
+                    box-sizing: border-box
+                  }
+                };
+                .select-box-right {
+                  flex: 1;
+                  justify-content: flex-end;
+                  align-items: center;
+                  display: flex;
+                  width: 0;
+                  >span {
+                    color: #101010;
+                    text-align: right;
+                    flex: 1;
+                    .no-wrap();
+                  };
+                  .selectBoxRightStyle {
+                    color: #bbbdc3 !important 
+                  }
+                }
+              };
               .patient-message-bottom-right {
-                width: 50%;
-                flex: none
+                width: 60%;
+                flex: none;
+                &:first-child {
+                  margin: 0 6px 0 0;
+                };
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                > span {
+                  width: 35%;
+                  margin-right: 4px;
+                  font-size: 14px;
+                  color: #9E9E9A;
+                }
               };
               .contact-isolation-box {
                 width: 50%;
@@ -2095,12 +2146,12 @@ export default {
                   }; 
                   &:nth-child(1) {
                     .van-radio__label {
-                      color: #101010 !important
+                      color: #95e195 !important
                     }
                   };
                   &:nth-child(2) {
                     .van-radio__label {
-                      color: #101010 !important
+                      color: orange !important
                     }
                   }
                 }
@@ -2409,33 +2460,30 @@ export default {
         .btn-box {
           width: 90%;
           margin: 0 auto;
-          height: 60px;
+          height: 100px;
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: center;
           >span {
-            width: 40%;
+            width: 35%;
             display: inline-block;
             height: 45px;
-            font-size: 18px;
+            font-size: 14px;
             line-height: 45px;
             background: #fff;
             text-align: center;
-            border-radius: 30px;
+            border-radius: 4px;
             &:nth-child(1) {
               color: #fff;
-              background: linear-gradient(to right, #6cd2f8, #2390fe);
-              box-shadow: 0px 2px 6px 0 rgba(36, 149, 213, 1);
+              background: #2B98FE;
+              box-shadow: 0px 2px 6px 0 rgba(0, 0, 0, 0.4);
               margin-right: 30px
             };
             &:nth-child(2) {
-              color: #1864FF;
-              box-shadow: 0px 2px 6px 0 rgba(36, 149, 213, 1);
-              margin-right: 30px
-            };
-            &:last-child {
-              color: #1864FF;
-              box-shadow: 0px 2px 6px 0 rgba(36, 149, 213, 1)
+              color: #2B98FE;
+              border: 1px solid #2B98FE;
+              box-sizing: border-box;
+              box-shadow: 0px 2px 6px 0 rgba(0, 0, 0, 0.4);
             }
           }
         }

@@ -4,6 +4,10 @@ export default {
   state: getDefaultTransTaskSchedulingState(),
 
   getters:{
+    transParentMessage: (state) => {
+      state.transParentMessage = JSON.parse(getStore('transParentMessage')) ? JSON.parse(getStore('transParentMessage')) : {};
+			return state.transParentMessage
+    },
     schedulingTaskType: (state) => {
       state.schedulingTaskType = JSON.parse(getStore('schedulingTaskType')) ? JSON.parse(getStore('schedulingTaskType')) : {};
 			return state.schedulingTaskType
@@ -28,6 +32,14 @@ export default {
   },
 
   mutations:{
+
+    // 保存运送任务类型
+    changeTransParentMessage (state, payLoad) {
+      if (payLoad && payLoad != 'null') {
+				setStore('transParentMessage', payLoad);
+				state.transParentMessage = payLoad
+			}
+    },
 
     // 保存任务调度切换类型
     changeSchedulingTaskType (state, payLoad) {

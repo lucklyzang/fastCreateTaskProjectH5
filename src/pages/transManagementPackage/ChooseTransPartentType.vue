@@ -64,23 +64,18 @@
 		computed: {
 			...mapGetters([
 				'navTopTitle',
-				'navigationBarHeight'
+				'navigationBarHeight',
+                'proId'
 			]),
 			userTypeId () {
 				return 0
 			},
 			userName() {
-					return ''
+				return ''
 			},
 			workerId() {
 				return 0
-			},
-			proName () {},
-			proId() {
-				return 7
-			},
-			depId() {},
-			depName() {}
+			}
 		},
 		
 		mounted() {
@@ -89,7 +84,7 @@
 		
 		methods: {
 			...mapMutations([
-				'storeCurrentIndex',
+				'changeTransParentMessage',
 			]),
 
             onClickLeft() {
@@ -98,10 +93,8 @@
 
 			// 运送类型点击事件
             transTypeEvent (item,index) {
-                const transmitMsg = JSON.stringify(item);
-                uni.navigateTo({
-                    url: `/transManagementPackage/pages/callTask/callTask?msg=${transmitMsg}`
-                })
+                this.changeTransParentMessage(item);
+                this.$router.push({ path: "/createDispathTask"})
             },
 		 
             //运送类型
@@ -147,7 +140,7 @@
             getTransportsType() {
                 return new Promise((resolve, reject) => {
                     queryTransportTypeClass({
-                            proId: this.proId,
+                            proId: 7,
                             state: 0
                         }).then((res) => {
                             if (res && res.data.code == 200) {

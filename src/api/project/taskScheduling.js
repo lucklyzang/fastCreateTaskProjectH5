@@ -34,6 +34,15 @@ export function createRepairsTask (data) {
   })
 };
 
+// 巡检问题上报
+export function reportProblem(data) {
+  return request({
+    url: 'project/bxTask/reportProblem',
+    method: 'post',
+    data
+  })
+};
+
 // 维修任务分配
 export function assignRepairsTask (data) {
   return request({

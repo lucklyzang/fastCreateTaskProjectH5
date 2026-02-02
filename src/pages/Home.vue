@@ -37,6 +37,7 @@
 		mapGetters,
 		mapMutations
 	} from 'vuex'
+	import { getUrlParam } from '@/common/js/utils'
 	export default{
 		data() {
 			return {
@@ -57,7 +58,9 @@
 						value: 'project',
 						url: require('@/common/images/home/project-icon.png')
 					}
-				]
+				],
+				depId: '',
+				proId: ''
 			}
 		},
 		computed: {
@@ -73,22 +76,30 @@
 			},
 			workerId() {
 				return 0
-			},
-			proName () {},
-			proId() {
-				return 7
-			},
-			depId() {},
-			depName() {}
+			}
 		},
 		
 		mounted() {
+			// this.getCodeMessage()
 		},
 		
 		methods: {
 			...mapMutations([
-				'storeCurrentIndex',
+				'storeDepId',
+				'storeProId'
 			]),
+
+			// 通过扫码进入获取相关参数(项目id,科室id)
+            getCodeMessage () {
+                if (window.location.href.indexOf("depId") != -1) {
+                    let depId = getUrlParam('depId');
+					this.storeDepId(depId);
+                };
+                if (window.location.href.indexOf("proId") != -1) {
+                    let proId = getUrlParam('proId');
+					this.storeProId(proId);
+                }
+            },
 
 			// 格式化时间
 			getNowFormatDate(currentDate,type) {
