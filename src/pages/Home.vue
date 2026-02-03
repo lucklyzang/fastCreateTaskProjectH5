@@ -58,9 +58,7 @@
 						value: 'project',
 						url: require('@/common/images/home/project-icon.png')
 					}
-				],
-				depId: '',
-				proId: ''
+				]
 			}
 		},
 		computed: {
@@ -80,7 +78,7 @@
 		},
 		
 		mounted() {
-			// this.getCodeMessage()
+			this.getCodeMessage()
 		},
 		
 		methods: {

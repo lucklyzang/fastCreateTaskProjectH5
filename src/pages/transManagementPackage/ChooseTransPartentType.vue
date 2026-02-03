@@ -140,7 +140,7 @@
             getTransportsType() {
                 return new Promise((resolve, reject) => {
                     queryTransportTypeClass({
-                            proId: 7,
+                            proId: this.proId,
                             state: 0
                         }).then((res) => {
                             if (res && res.data.code == 200) {

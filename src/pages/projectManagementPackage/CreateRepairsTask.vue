@@ -224,18 +224,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["templateType"]),
+    ...mapGetters(["templateType","proId","depId"]),
     userTypeId () {
       return 0
     },
     userName() {
       return ''
-    },
-    proId () {
-      return 7
-    },
-    depId () {
-      return 385
     },
     workerId() {
       return 0
@@ -598,7 +592,7 @@ export default {
         return
       };
       // 联系方式不能为空
-      if (this.contact == '') {
+      if (this.contact === '') {
         this.$toast('联系方式不能为空');
         return
       };

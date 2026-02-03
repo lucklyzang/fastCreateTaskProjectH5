@@ -536,21 +536,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["templateType","transParentMessage"]),
+    ...mapGetters(["templateType","transParentMessage","depId","proId"]),
     userTypeId () {
       return 0
     },
     userName() {
       return ''
     },
-    depId() {
-      return 385
-    },
     workerId() {
       return 0
-    },
-    proId() {
-      return 7
     },
     proName () {
       return ''
