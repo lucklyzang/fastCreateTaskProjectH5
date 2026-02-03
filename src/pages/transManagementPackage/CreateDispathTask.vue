@@ -331,6 +331,19 @@
               </van-radio-group>
             </div>
           </div>
+          <div class="concat-box">
+            <div class="concat-box-left">
+              <span>*</span>
+              <span>联系人(电话)</span>
+            </div>
+            <div class="concat-box-right">
+              <van-field
+                v-model="contact"
+                type="text"
+                placeholder="请输入联系方式"
+              />
+            </div>
+          </div>
           <div class="task-describe transport-type">
             <div class="transport-type-left">
               <span>任务描述</span>
@@ -481,7 +494,8 @@ export default {
       xflSelectShow: false,
       isPressEdit: false,
       updateIndex: 0,
-      statusBackgroundPng: require("@/common/images/home/status-background.png")
+      statusBackgroundPng: require("@/common/images/home/status-background.png"),
+      contact: ''
     }
   },
 
@@ -538,7 +552,9 @@ export default {
     proId() {
       return 7
     },
-    proName () {}
+    proName () {
+      return ''
+    }
   },
 
   methods: {
@@ -1216,7 +1232,17 @@ export default {
             return
           }
         }
-      };  
+      };
+      // 联系方式不能为空
+      if (this.contact === '') {
+        this.$toast('联系方式不能为空');
+        return
+      };
+      // 联系方式校验
+      // if(!(/^1[3-9]\d{9}$/.test(this.contact))){
+      //   this.$toast("联系方式有误，请重新填写");
+      //   return
+      // }  
       this.loadingShow = true;
       this.overlayShow = true;
       this.loadingText = '查询中...';
@@ -1300,7 +1326,8 @@ export default {
           proName: this.proName,   //项目名称
           isBack: this.isBackRadioValue,  //是否返回出发地  0-不返回，1-返回
           createType: 1, //创建类型   0-web端,1-手机端(医护),3-手机端(任务调度)
-          startTerminal: 1 // 发起客户端类型 1-安卓APP，2-微信小程序
+          startTerminal: 1, // 发起客户端类型 1-安卓APP，2-微信小程序
+          contact: this.contact // 联系方式
         };
         // 创建调度任务
         this.postGenerateDispatchTask(taskMessage);
@@ -1323,7 +1350,8 @@ export default {
           proName: this.proName, //项目名称
           isBack: this.isBackRadioValue, //是否返回出发地  0-不返回，1-返回
           createType: 1, //创建类型   0-web端,1-手机端(医护),3-手机端(任务调度)
-          startTerminal: 1 // 发起客户端类型 1-安卓APP，2-微信小程序
+          startTerminal: 1, // 发起客户端类型 1-安卓APP，2-微信小程序
+          contact: this.contact // 联系方式
         };
         // 处理多个终点科室信息
         if (this.currentGoalSpaces.length > 0) {
@@ -1928,6 +1956,37 @@ export default {
               }
             };
           };
+          .concat-box {
+             width: 100%;
+            padding: 8px 6px;
+            box-sizing: border-box;
+            background: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            margin-top: 6px;
+            .concat-box-left {
+              width: 105px;
+              >span {
+                &:nth-child(1) {
+                  color: red
+                };
+                &:nth-child(2) {
+                  color: #9E9E9A;
+                  padding-right: 6px;
+                  box-sizing: border-box
+                }
+              }
+            };
+            .concat-box-right {
+              flex: 1;
+              /deep/ .van-cell {
+                padding: 4px 6px !important;
+                background: #F9F9F9
+              }
+            }
+          };
           .transport-type {
             width: 100%;
             padding: 10px 6px;
@@ -1938,7 +1997,8 @@ export default {
             font-size: 14px;
             margin-top: 6px;
             .transport-type-left {
-              padding: 0 10px;
+              padding: 0 0 0 10px;
+              width: 105px;
               box-sizing: border-box;
               >span {
                 &:nth-child(1) {

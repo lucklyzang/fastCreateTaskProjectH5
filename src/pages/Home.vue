@@ -93,12 +93,24 @@
             getCodeMessage () {
                 if (window.location.href.indexOf("depId") != -1) {
                     let depId = getUrlParam('depId');
-					this.storeDepId(depId);
-                };
+					if (depId === '') {
+						this.storeDepId(385);
+					} else {
+						this.storeDepId(depId);
+					}
+                } else {
+					this.storeDepId(385);
+				};
                 if (window.location.href.indexOf("proId") != -1) {
                     let proId = getUrlParam('proId');
-					this.storeProId(proId);
-                }
+					if (proId === '') {
+						this.storeProId(7);
+					} else {
+						this.storeProId(proId);
+					}
+                } else {
+					this.storeProId(7);
+				};
             },
 
 			// 格式化时间

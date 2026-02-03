@@ -1,7 +1,7 @@
 {
     "name": "wisdomLogisticsServePlatform",
     "version": "1.0.0",
-    "description": "智慧后勤服务平台",
+    "description": "智慧后勤",
     "author": "yong.zhang",
     "private": true,
     "scripts": {

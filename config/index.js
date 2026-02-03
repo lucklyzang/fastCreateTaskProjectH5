@@ -53,12 +53,12 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../wisdomLogisticsServePlatformApp/index.html'),
+    index: path.resolve(__dirname, '../fastCreateTaskProjectH5/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../wisdomLogisticsServePlatformApp'),
+    assetsRoot: path.resolve(__dirname, '../fastCreateTaskProjectH5'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/wisdomLogisticsServePlatformApp/',
+    assetsPublicPath: '/fastCreateTaskProjectH5/',
 
     /**
      * Source Maps
