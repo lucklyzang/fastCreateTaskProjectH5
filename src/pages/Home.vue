@@ -77,8 +77,17 @@
 			}
 		},
 		
+		beforeRouteEnter(to, from, next) {
+			if (from.path === '/') {
+				next((vm)=>{
+					vm.getCodeMessage()
+				})
+			} else {
+				next()
+			}
+		},
+
 		mounted() {
-			this.getCodeMessage()
 		},
 		
 		methods: {

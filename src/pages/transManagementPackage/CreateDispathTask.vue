@@ -120,7 +120,7 @@
     <div class="nav">
        <van-nav-bar
         :title="currentTransportRice"
-        left-text=""
+        left-text="返回"
         :left-arrow="true"
         :placeholder="true"
         :border="false"
@@ -506,7 +506,7 @@ export default {
       pushHistory();
       that.gotoURL(() => {
         pushHistory();
-        that.$router.push({path: '/'})
+        that.$router.push({path: '/chooseTransPartentType'})
       })
     };
     this.parallelFunction();

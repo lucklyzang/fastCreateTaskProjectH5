@@ -5,7 +5,7 @@
 		<div class="nav">
             <van-nav-bar
                 title="任务呼叫"
-                left-text=""
+                left-text="返回"
                 :left-arrow="true"
                 :placeholder="true"
                 :border="false"
@@ -47,6 +47,7 @@
 		mapMutations
 	} from 'vuex'
     import { queryTransportTypeClass } from '@/api/trans/medicalPort.js'
+    import { IsPC } from '@/common/js/utils'
 	export default{
 		data() {
 			return {
@@ -79,6 +80,15 @@
 		},
 		
 		mounted() {
+            // 控制设备物理返回按键测试
+            if (!IsPC()) {
+                let that = this;
+                pushHistory();
+                that.gotoURL(() => {
+                    pushHistory();
+                    that.$router.push({path: '/'})
+                })
+            };
             this.parallelFunctionTwo();
 		},
 		
