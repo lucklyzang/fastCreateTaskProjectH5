@@ -3,10 +3,6 @@
 		<div class="top-background-area"></div>
 		<!-- 顶部标题 -->
 		<div class="topTabbar" :style="{ 'height': navigationBarHeight + 'px', 'lineHeight': navigationBarHeight + 'px'}">
-				<div class="title-left">
-					<img :src="homeIconPng" />
-					<span>新茂医信</span>
-				</div>
 				<div class="title-center">
 					智慧后勤服务平台
 				</div>
@@ -44,7 +40,6 @@
 				showLoadingHint: false,
 				triangleRectListInfoShow: false,
 				infoText: '加载中···',
-                homeIconPng: require('@/common/images/home/home-icon.png'),
                 homeBannerPng: require('@/common/images/home/home-banner.png'),
 				hasAuthserviceManagementSystemsList: [],
 				serviceList: [
@@ -205,28 +200,10 @@
 			display: flex;
 			box-sizing: border-box;
 			align-items: center;
+			justify-content: center;
 			position: relative;
 			background: #fff;
-			.title-left {
-				padding-left: 8px;
-				box-sizing: border-box;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				>img {
-					width: 23px;
-					margin-right: 2px;
-					vertical-align: middle;
-				};
-				>span {
-					font-size: 12px;
-					color: #3370FF;
-					vertical-align: middle;
-				}
-			};
 			.title-center {
-				flex: 1;
-				padding-left: 15%;
 				font-size: 14px;
 				color: #101010;
 			}
