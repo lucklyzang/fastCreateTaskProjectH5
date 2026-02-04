@@ -1951,7 +1951,7 @@ export default {
             };
           };
           .concat-box {
-             width: 100%;
+            width: 100%;
             padding: 8px 6px;
             box-sizing: border-box;
             background: #fff;
