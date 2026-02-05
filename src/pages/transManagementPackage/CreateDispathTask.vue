@@ -161,8 +161,9 @@
               <van-icon name="arrow" :color="transportPartentSelected ? '#989999' : '#d6d6d6'" size="20" />
             </div>
           </div> -->
-          <div class="transport-type" v-if="templateType === 'template_one'">
+          <div class="transport-type transport-type-other" v-if="templateType === 'template_one'">
             <div class="transport-type-left">
+              <span>*</span>
               <span>运送类型</span>
             </div>
             <div class="transport-type-right">
@@ -1254,6 +1255,10 @@ export default {
           this.$toast({message: '请选择运送大类',type: 'fail'});
           return
         };
+        if (this.currentTransportType === '') {
+          this.$toast({message: '请选择运送类型',type: 'fail'});
+          return
+        };
         if (this.currentStartDepartment == '请选择' || !this.currentStartDepartment) {
           this.$toast({message: '请选择起点科室',type: 'fail'});
           return
@@ -1923,6 +1928,19 @@ export default {
                 }
               }
             }
+          };
+          .transport-type-other {
+            .transport-type-left {
+              padding: 0 0 0 0 !important;
+               >span {
+                &:nth-child(1) {
+                  color: red !important;
+                }
+                &:nth-child(2) {
+                  color: #9E9E9A
+                }
+              }
+            }  
           };
           .select-box {
             width: 100%;

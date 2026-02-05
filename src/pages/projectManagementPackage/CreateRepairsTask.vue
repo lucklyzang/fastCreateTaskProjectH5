@@ -77,6 +77,7 @@
           </div>
           <div class="list-line-image">
               <div>
+                <span>*</span>
                 <span>问题拍照</span>
               </div>
                 <div class="image-list">
@@ -591,6 +592,11 @@ export default {
         this.$toast('任务类型不能为空');
         return
       };
+      // 问题拍照不能为空
+      if (this.problemPicturesList.length == 0) {
+        this.$toast('问题拍照不能为空');
+        return
+      };
       // 联系方式不能为空
       if (this.contact === '') {
         this.$toast('请输入联系人及联系方式');
@@ -615,7 +621,7 @@ export default {
 					workerId: this.workerId,
 					workerName: '',
 					flag: 1,
-					images: this.problemPicturesList, // 问题图片信息 非必输
+					images: this.problemPicturesList, // 问题图片信息 必输
 					createType: 10,
           contact: this.contact, //联系方式
 					flag: 1 // 上报人类型，0-维修人员，1-医护人员
@@ -906,7 +912,7 @@ export default {
                 background: #fff;
                 align-items: center;
                 margin-top: 10px;
-                padding: 10px 0 10px 6px;
+                padding: 10px 0 10px 0;
                 box-sizing: border-box;
                 >div {
                   &:first-child {
@@ -914,8 +920,13 @@ export default {
                     color: #9E9E9A; 
                     height: 40px;
                     line-height: 40px;
-                    padding-left: 10px;
+                    padding-left: 6px;
                     box-sizing: border-box;
+                    >span {
+                      &:first-child {
+                        color: red !important;
+                      }
+                    }
                   }
                 };
                 .image-list {
