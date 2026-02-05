@@ -616,7 +616,7 @@ export default {
 					workerName: '',
 					flag: 1,
 					images: this.problemPicturesList, // 问题图片信息 非必输
-					createType: 3,
+					createType: 10,
           contact: this.contact, //联系方式
 					flag: 1 // 上报人类型，0-维修人员，1-医护人员
       };

@@ -12,7 +12,8 @@
       <div class="slot-content">
         <div class="contact-isolation-box">
           <div>
-            <span>接触隔离:</span>
+            <span class="span-one" v-show="isContactisolation">*</span>
+            <span class="span-two">接触隔离:</span>
           </div>
           <div>
             <van-radio-group v-model="patienModalMessage.isContactisolationValue" direction="horizontal">
@@ -309,9 +310,10 @@
               添加病人信息
             </div>
           </div>
-          <div class="message-one is-back">
+          <div class="message-one is-back contact-isolation"  v-if="templateType === 'template_one'">
               <div class="message-one-left">
-                接触隔离
+                <span class="span-one" :class="{'spanOneStyle' : isContactisolation === true }">*</span>
+                <span class="span-two">接触隔离</span>
               </div>
               <div class="message-one-right">
                 <van-radio-group v-model="isContactisolationValue" direction="horizontal">
@@ -495,7 +497,8 @@ export default {
       isPressEdit: false,
       updateIndex: 0,
       statusBackgroundPng: require("@/common/images/home/status-background.png"),
-      contact: ''
+      contact: '',
+      isContactisolation: false
     }
   },
 
@@ -509,6 +512,8 @@ export default {
         that.$router.push({path: '/chooseTransPartentType'})
       })
     };
+    // 查询接触隔离配置
+    this.getContactIsolationConfig();
     this.parallelFunction();
     // 为当前页面运送大类赋值
 		this.currentTransportRice = this.transParentMessage['text'];
@@ -1194,6 +1199,54 @@ export default {
         return this.transporterList.filter((item) => {return item['text'] == text })[0]['value']
       },
 
+    // 查询接触隔离配置
+    getContactIsolationConfig () {
+      this.loadingShow = true;
+      this.overlayShow = true;
+      this.loadingText = '查询中...';
+      this.isContactisolation = false;
+       queryTransConfig(this.proId,'TRANS_QUARANTINE').then((res) => {
+        if (res && res.data.code == 200) {
+          if (JSON.parse(res.data.data)[0]['value'] == 1) {
+            if (this.templateType === 'template_one') {
+              if (this.currentTransportRice == '检查') {
+                this.isContactisolation = true;
+              } else {
+                this.isContactisolation = false;
+              }  
+            } else if (this.templateType === 'template_two') {
+              if (this.currentTransportRice == '检查') {
+               this.isContactisolation = true;
+              } else {
+                this.isContactisolation = false;
+              } 
+            }  
+          } else {
+            this.isContactisolation = false;
+          }
+        } else {
+          this.$dialog.alert({
+            message: `${res.data.msg}`,
+            closeOnPopstate: true
+          }).then(() => {
+          })
+        };
+        this.loadingShow = false;
+        this.overlayShow = false;
+        this.loadingText = ''
+      })
+      .catch((err) => {
+        this.$dialog.alert({
+          message: `${err.message}`,
+          closeOnPopstate: true
+        }).then(() => {
+        });
+        this.loadingShow = false;
+        this.overlayShow = false;
+        this.loadingText = ''
+      })
+    },
+
     // 查询是否配置接触隔离选项0-没配置1-配置
     getTransConfig () {
       if (this.templateType === 'template_one') {
@@ -1237,58 +1290,32 @@ export default {
       //   this.$toast("联系方式有误，请重新填写");
       //   return
       // }  
-      this.loadingShow = true;
-      this.overlayShow = true;
-      this.loadingText = '查询中...';
-      queryTransConfig(this.proId,'TRANS_QUARANTINE').then((res) => {
-        if (res && res.data.code == 200) {
-          if (JSON.parse(res.data.data)[0]['value'] == 1) {
-            if (this.templateType === 'template_one') {
-              if (this.currentTransportRice == '检查') {
-                if (this.isContactisolationValue === null) {
-                  this.$toast('请确认病人是否需要接触隔离!')
-                } else {
-                  this.sureEvent(true)
-                }
-              } else {
-                this.sureEvent(false)
-              }  
-            } else if (this.templateType === 'template_two') {
-              if (this.currentTransportRice == '检查') {
-                let temporaryFlag = this.templatelistTwo.some((item) => { return item.isContactisolationValue === null });
-                if (temporaryFlag) {
-                  this.$toast('请确认病人是否需要接触隔离!')
-                } else {
-                  this.sureEvent(true)
-                }
-              } else {
-                this.sureEvent(false)
-              } 
-            }  
+      if (this.isContactisolation === true) {
+        if (this.templateType === 'template_one') {
+          if (this.currentTransportRice == '检查') {
+            if (this.isContactisolationValue === null) {
+              this.$toast('请确认病人是否需要接触隔离!')
+            } else {
+              this.sureEvent(true)
+            }
           } else {
             this.sureEvent(false)
-          }
-        } else {
-          this.$dialog.alert({
-            message: `${res.data.msg}`,
-            closeOnPopstate: true
-          }).then(() => {
-          })
-        };
-        this.loadingShow = false;
-        this.overlayShow = false;
-        this.loadingText = ''
-      })
-      .catch((err) => {
-        this.$dialog.alert({
-          message: `${err.message}`,
-          closeOnPopstate: true
-        }).then(() => {
-        });
-        this.loadingShow = false;
-        this.overlayShow = false;
-        this.loadingText = ''
-      })
+          }  
+        } else if (this.templateType === 'template_two') {
+          if (this.currentTransportRice == '检查') {
+            let temporaryFlag = this.templatelistTwo.some((item) => { return item.isContactisolationValue === null });
+            if (temporaryFlag) {
+              this.$toast('请确认病人是否需要接触隔离!')
+            } else {
+              this.sureEvent(true)
+            }
+          } else {
+            this.sureEvent(false)
+          } 
+        }  
+      } else {
+        this.sureEvent(false)
+      }
     },
 
     // 确认事件(创建调度任务)
@@ -1319,7 +1346,7 @@ export default {
           proId: this.proId,   //项目ID
           proName: this.proName,   //项目名称
           isBack: this.isBackRadioValue,  //是否返回出发地  0-不返回，1-返回
-          createType: 1, //创建类型   0-web端,1-手机端(医护),3-手机端(任务调度)
+          createType: 10, //创建类型   0-web端,1-手机端(医护),3-手机端(任务调度)
           startTerminal: 1, // 发起客户端类型 1-安卓APP，2-微信小程序
           contact: this.contact // 联系方式
         };
@@ -1343,7 +1370,7 @@ export default {
           proId: this.proId, //项目ID
           proName: this.proName, //项目名称
           isBack: this.isBackRadioValue, //是否返回出发地  0-不返回，1-返回
-          createType: 1, //创建类型   0-web端,1-手机端(医护),3-手机端(任务调度)
+          createType: 10, //创建类型   0-web端,1-手机端(医护),3-手机端(任务调度)
           startTerminal: 1, // 发起客户端类型 1-安卓APP，2-微信小程序
           contact: this.contact // 联系方式
         };
@@ -1635,10 +1662,11 @@ export default {
               &:first-child {
                 margin-right: 20px;
                 font-size: 16px;
-                >span {
-                  &:first-child {
-                    color: #101010
-                  }
+                .span-one {
+                  color: red !important
+                };
+                .span-two {
+                  color: #101010 !important;
                 }
               };
               &:last-child {
@@ -1863,7 +1891,7 @@ export default {
             font-size: 14px;
             margin-top: 6px;
             .message-one-left {
-              width: 20%;
+              width: 18%;
               color: #101010
             };
             .message-one-right {
@@ -1949,6 +1977,23 @@ export default {
                 };
               }
             };
+          };
+          .contact-isolation {
+            padding: 10px 6px !important;
+            .message-one-left {
+              >span {
+                font-size: 14px !important;
+              };
+              .span-one {
+                color: transparent !important
+              };
+              .spanOneStyle {
+                color: red !important;
+              };
+              .span-two {
+                color: #9E9E9A !important
+              }
+            }
           };
           .concat-box {
             width: 100%;
