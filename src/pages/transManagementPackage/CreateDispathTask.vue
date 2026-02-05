@@ -342,7 +342,7 @@
               <van-field
                 v-model="contact"
                 type="text"
-                placeholder="请输入联系方式"
+                placeholder="请输入联系人及联系方式"
               />
             </div>
           </div>
@@ -1282,7 +1282,7 @@ export default {
       };
       // 联系方式不能为空
       if (this.contact === '') {
-        this.$toast('联系方式不能为空');
+        this.$toast('请输入联系人及联系方式');
         return
       };
       // 联系方式校验
