@@ -108,8 +108,22 @@
               />
             </div>
           </div>
+          <div class="concat-box">
+            <div class="concat-box-left">
+              <span>*</span>
+              <span>联系人(姓名)</span>
+            </div>
+            <div class="concat-box-right">
+              <van-field
+                v-model="contactName"
+                type="text"
+                placeholder="请输入联系人姓名"
+              />
+            </div>
+          </div>
           <div class="task-describe transport-type">
             <div class="transport-type-left">
+              <span>*</span>
               <span>任务描述</span>
             </div>
             <div class="transport-type-right">
@@ -203,7 +217,8 @@ export default {
       photoBox: false,
       imgBoxShow: false,
       overlayShow: false,
-      contact: ''
+      contact: '',
+      contactName: ''
     }
   },
 
@@ -602,6 +617,16 @@ export default {
         this.$toast('请输入联系人及联系方式');
         return
       };
+      // 联系人姓名不能为空
+      if (this.contactName === '') {
+        this.$toast('请输入联系人姓名');
+        return
+      };
+      // 任务描述不能为空
+      if (this.taskDescribe === '') {
+        this.$toast('请输入任务描述'); 
+        return
+      };
       // 联系方式校验
       // if(!(/^1[3-9]\d{9}$/.test(this.contact))){
       //   this.$toast("联系方式有误，请重新填写");
@@ -624,6 +649,7 @@ export default {
 					images: this.problemPicturesList, // 问题图片信息 必输
 					createType: 10,
           contact: this.contact, //联系方式
+          contactName: this.contactName, // 联系人姓名
 					flag: 1 // 上报人类型，0-维修人员，1-医护人员
       };
       this.postGenerateRepairsTask(temporaryMessage)
@@ -1075,11 +1101,13 @@ export default {
             font-size: 14px;
             margin-top: 6px;
             .transport-type-left {
-              padding: 0 0 0 10px;
               width: 105px;
               box-sizing: border-box;
               >span {
                 &:nth-child(1) {
+                  color: red;
+                };
+                &:nth-child(2) {
                   color: #9E9E9A
                 }
               }
