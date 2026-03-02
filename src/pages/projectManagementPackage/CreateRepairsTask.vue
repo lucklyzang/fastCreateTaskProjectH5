@@ -98,19 +98,6 @@
           <div class="concat-box">
             <div class="concat-box-left">
               <span>*</span>
-              <span>联系人(电话)</span>
-            </div>
-            <div class="concat-box-right">
-              <van-field
-                v-model="contact"
-                type="text"
-                placeholder="请输入联系人及联系方式"
-              />
-            </div>
-          </div>
-          <div class="concat-box">
-            <div class="concat-box-left">
-              <span>*</span>
               <span>联系人(姓名)</span>
             </div>
             <div class="concat-box-right">
@@ -118,6 +105,19 @@
                 v-model="contactName"
                 type="text"
                 placeholder="请输入联系人姓名"
+              />
+            </div>
+          </div>
+          <div class="concat-box">
+            <div class="concat-box-left">
+              <span>*</span>
+              <span>联系人(电话)</span>
+            </div>
+            <div class="concat-box-right">
+              <van-field
+                v-model="contact"
+                type="number"
+                placeholder="请输入联系人电话"
               />
             </div>
           </div>
@@ -612,26 +612,26 @@ export default {
         this.$toast('问题拍照不能为空');
         return
       };
-      // 联系方式不能为空
-      if (this.contact === '') {
-        this.$toast('请输入联系人及联系方式');
-        return
-      };
       // 联系人姓名不能为空
       if (this.contactName === '') {
         this.$toast('请输入联系人姓名');
         return
       };
+      // 联系人电话不能为空
+      if (this.contact === '') {
+        this.$toast('请输入联系人电话');
+        return
+      };
+      // 联系方式校验
+      if(!(/^1[3-9]\d{9}$/.test(this.contact))){
+        this.$toast("联系人电话有误，请重新填写");
+        return
+      }; 
       // 任务描述不能为空
       if (this.taskDescribe === '') {
         this.$toast('请输入任务描述'); 
         return
       };
-      // 联系方式校验
-      // if(!(/^1[3-9]\d{9}$/.test(this.contact))){
-      //   this.$toast("联系方式有误，请重新填写");
-      //   return
-      // }; 
       // 创建维修任务
       let temporaryMessage = {
         	typeId: this.taskTypeOption.filter((item) => { return item['text'] == this.currentTaskType})[0]['value'], // 任务类型id
