@@ -65,9 +65,8 @@
               <van-icon name="arrow" color="#989999" size="20" />
             </div>
           </div>
-          <div class="select-box">
+          <div class="select-box end-select-box">
             <div class="select-box-left">
-              <span>*</span>
               <span>任务类型</span>
             </div>
             <div class="select-box-right" @click="showTaskType = true">
@@ -603,10 +602,10 @@ export default {
     // 确认事件(问题上报)
     sureEvent () {
       // 任务类型不能为空
-      if (this.currentTaskType == '请选择') {
-        this.$toast('任务类型不能为空');
-        return
-      };
+      // if (this.currentTaskType == '请选择') {
+      //   this.$toast('任务类型不能为空');
+      //   return
+      // };
       // 问题拍照不能为空
       if (this.problemPicturesList.length == 0) {
         this.$toast('问题拍照不能为空');
@@ -634,8 +633,8 @@ export default {
       };
       // 创建维修任务
       let temporaryMessage = {
-        	typeId: this.taskTypeOption.filter((item) => { return item['text'] == this.currentTaskType})[0]['value'], // 任务类型id
-					typeName: this.currentTaskType, // 任务类型名称
+        	typeId: this.currentTaskType == '请选择' ? '' : this.taskTypeOption.filter((item) => { return item['text'] == this.currentTaskType})[0]['value'], // 任务类型id
+					typeName: this.currentTaskType == '请选择' ? '' : this.currentTaskType, // 任务类型名称
 					depName: this.currentGoalDepartment, //科室名称
 					depId: this.depId, // 目的科室id
 					spaceId: this.currentGoalSpaces == '请选择' ? '' : this.goalSpacesOption.filter((item) => { return item['text'] == this.currentGoalSpaces})[0]['value'], //目的房间id
