@@ -158,7 +158,7 @@
                             }
                         })
                         .catch((err) => {
-                            reject(err.message)
+                            reject(err)
                         })
                 })
             }
