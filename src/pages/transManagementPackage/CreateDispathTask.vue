@@ -161,9 +161,9 @@
               <van-icon name="arrow" :color="transportPartentSelected ? '#989999' : '#d6d6d6'" size="20" />
             </div>
           </div> -->
-          <div class="transport-type transport-type-other" v-if="templateType === 'template_one'">
+          <div class="transport-type" v-if="templateType === 'template_one'">
             <div class="transport-type-left">
-              <span>*</span>
+              <!-- <span>*</span> -->
               <span>运送类型</span>
             </div>
             <div class="transport-type-right">
@@ -336,7 +336,7 @@
           </div>
           <div class="concat-box">
             <div class="concat-box-left">
-              <span>*</span>
+              <!-- <span>*</span> -->
               <span>联系人(电话)</span>
             </div>
             <div class="concat-box-right">
@@ -1255,10 +1255,10 @@ export default {
           this.$toast({message: '请选择运送大类',type: 'fail'});
           return
         };
-        if (this.currentTransportType === '') {
-          this.$toast({message: '请选择运送类型',type: 'fail'});
-          return
-        };
+        // if (this.currentTransportType === '') {
+        //   this.$toast({message: '请选择运送类型',type: 'fail'});
+        //   return
+        // };
         if (this.currentStartDepartment == '请选择' || !this.currentStartDepartment) {
           this.$toast({message: '请选择起点科室',type: 'fail'});
           return
@@ -1286,10 +1286,10 @@ export default {
         }
       };
       // 联系方式不能为空
-      if (this.contact === '') {
-        this.$toast('请输入联系人及联系方式');
-        return
-      };
+      // if (this.contact === '') {
+      //   this.$toast('请输入联系人及联系方式');
+      //   return
+      // };
       // 联系方式校验
       // if(!(/^1[3-9]\d{9}$/.test(this.contact))){
       //   this.$toast("联系方式有误，请重新填写");
@@ -2015,7 +2015,7 @@ export default {
           };
           .concat-box {
             width: 100%;
-            padding: 8px 6px;
+            padding: 8px 6px 8px 16px;
             box-sizing: border-box;
             background: #fff;
             display: flex;
@@ -2026,12 +2026,12 @@ export default {
             .concat-box-left {
               width: 105px;
               >span {
+                // &:nth-child(1) {
+                //   color: red
+                // };
                 &:nth-child(1) {
-                  color: red
-                };
-                &:nth-child(2) {
                   color: #9E9E9A;
-                  padding-right: 6px;
+                  // padding-right: 6px;
                   box-sizing: border-box
                 }
               }
