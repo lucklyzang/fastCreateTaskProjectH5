@@ -194,8 +194,9 @@
               <van-field v-model="taskTransportTotal" type="digit" readonly />
             </div>
           </div>
-          <div class="select-box end-select-box">
+          <div class="select-box">
             <div class="select-box-left">
+              <span>*</span>
               <span>终点科室</span>
             </div>
             <div class="select-box-right" @click="templateType === 'template_one' ? showEndDepartment = true : showGoalSpaces = true">
@@ -1261,6 +1262,10 @@ export default {
         // };
         if (this.currentStartDepartment == '请选择' || !this.currentStartDepartment) {
           this.$toast({message: '请选择起点科室',type: 'fail'});
+          return
+        };
+        if (this.currentEndDepartment == '请选择' || !this.currentEndDepartment) {
+          this.$toast({message: '请选择终点科室',type: 'fail'});
           return
         };
         // 起始地与目的地不能相同

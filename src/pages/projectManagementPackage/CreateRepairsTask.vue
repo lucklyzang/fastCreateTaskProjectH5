@@ -94,9 +94,9 @@
                   </div>
               </div>
             </div>
-          <div class="concat-box">
+          <div class="concat-box concat-name-box">
             <div class="concat-box-left">
-              <span>*</span>
+              <!-- <span>*</span> -->
               <span>联系人(姓名)</span>
             </div>
             <div class="concat-box-right">
@@ -612,10 +612,10 @@ export default {
         return
       };
       // 联系人姓名不能为空
-      if (this.contactName === '') {
-        this.$toast('请输入联系人姓名');
-        return
-      };
+      // if (this.contactName === '') {
+      //   this.$toast('请输入联系人姓名');
+      //   return
+      // };
       // 联系人电话不能为空
       if (this.contact === '') {
         this.$toast('请输入联系人电话');
@@ -1089,6 +1089,16 @@ export default {
                 background: #F9F9F9
               }
             } 
+          };
+          .concat-name-box {
+            padding: 8px 6px 8px 16px;
+            .concat-box-left {
+              >span {
+                &:nth-child(1) {
+                  color: #9E9E9A !important;
+                }
+              }
+            }
           };
           .transport-type {
             width: 100%;

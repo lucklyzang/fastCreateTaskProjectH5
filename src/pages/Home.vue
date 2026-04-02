@@ -1,5 +1,6 @@
 <template>
 	<div class="content">
+		<van-overlay :show="overlayShow" z-index="100000" custom-style="{opacity:.6}"/>
 		<div class="top-background-area"></div>
 		<!-- 顶部标题 -->
 		<div class="topTabbar" :style="{ 'height': navigationBarHeight + 'px', 'lineHeight': navigationBarHeight + 'px'}">
@@ -25,7 +26,6 @@
 				</div>
 			</div>
 		</div>
-		<van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>  
 	</div>
 </template>
 <script>
@@ -37,9 +37,7 @@
 	export default{
 		data() {
 			return {
-				showLoadingHint: false,
-				triangleRectListInfoShow: false,
-				infoText: '加载中···',
+				overlayShow: false,
                 homeBannerPng: require('@/common/images/home/home-banner.png'),
 				hasAuthserviceManagementSystemsList: [],
 				serviceList: [
@@ -95,77 +93,53 @@
             getCodeMessage () {
                 if (window.location.href.indexOf("depId") != -1) {
                     let depId = getUrlParam('depId');
-					if (depId === '') {
-						this.storeDepId(385);
+					if (depId === '' || depId === undefined || depId === null) {
+						// 取不到科室id,禁止后续操作
+						this.overlayShow = true;
+						this.$dialog.alert({
+							message: '请先扫描下单二维码',
+							closeOnPopstate: true,
+							showConfirmButton: false
+						}).then(() => {
+						})
 					} else {
 						this.storeDepId(depId);
 					}
                 } else {
-					this.storeDepId(385);
+					// 取不到科室id,禁止后续操作
+					this.overlayShow = true;
+					this.$dialog.alert({
+						message: '请先扫描下单二维码',
+						closeOnPopstate: true,
+						showConfirmButton: false
+					}).then(() => {
+					})
 				};
                 if (window.location.href.indexOf("proId") != -1) {
                     let proId = getUrlParam('proId');
-					if (proId === '') {
-						this.storeProId(7);
+					if (proId === '' || proId === undefined || proId === null) {
+						// 取不到项目id,禁止后续操作
+						this.overlayShow = true;
+						this.$dialog.alert({
+							message: '请先扫描下单二维码',
+							closeOnPopstate: true,
+							showConfirmButton: false
+						}).then(() => {
+						})
 					} else {
 						this.storeProId(proId);
 					}
                 } else {
-					this.storeProId(7);
-				};
+					// 取不到项目id,禁止后续操作
+					this.overlayShow = true;
+					this.$dialog.alert({
+						message: '请先扫描下单二维码',
+						closeOnPopstate: true,
+						showConfirmButton: false
+					}).then(() => {
+					})
+				}
             },
-
-			// 格式化时间
-			getNowFormatDate(currentDate,type) {
-				// type:1(只显示小时分钟秒),2(只显示年月日)3(只显示年月)4(显示年月日小时分钟秒)5(显示月日)
-				let currentdate;
-				let strDate = currentDate.getDate();
-				let seperator1 = "-";
-				let seperator2 = ":";
-				let seperator3 = " ";
-				let month = currentDate.getMonth() + 1;
-				let hour = currentDate.getHours();
-				let minutes = currentDate.getMinutes();
-				let seconds = currentDate.getSeconds();
-				if (month >= 1 && month <= 9) {
-					month = "0" + month;
-				};
-				if (hour >= 0 && hour <= 9) {
-					hour = "0" + hour;
-				};
-				if (minutes >= 0 && minutes <= 9) {
-					minutes = "0" + minutes;
-				};
-				if (seconds >= 0 && seconds <= 9) {
-					seconds = "0" + seconds;
-				};
-				if (strDate >= 0 && strDate <= 9) {
-					strDate = "0" + strDate;
-				};
-				if (type == 1) {
-					currentdate = hour + seperator2 + minutes + seperator2 + seconds
-				};
-				if (type == 2) {
-					currentdate = currentDate.getFullYear() + seperator1 + month + seperator1 + strDate
-				};
-				if (type == 3) {
-					currentdate = currentDate.getFullYear() + seperator1 + month
-				};
-				if (type == 4) {
-					currentdate = currentDate.getFullYear() + seperator1 + month + seperator1 + strDate + seperator3 + hour + seperator2 + minutes + seperator2 + seconds
-				};
-				if (type == 5) {
-					currentdate = month + seperator1 + strDate
-				};
-				return currentdate
-			},
-			
-			// px转换成rpx
-			rpxTopx(px){
-				let deviceWidth = uni.getSystemInfoSync().windowWidth;
-				let rpx = ( 750 / deviceWidth ) * Number(px);
-				return Math.floor(rpx)
-			},
 			
 			// 服务管理项点击事件
 			serviceManagementEvent (item,index) {
@@ -189,6 +163,9 @@
 		box-sizing: border-box;
 		position: relative;
 		background: #F8F8F8;
+		/deep/ .van-overlay {
+			opacity: .1;
+		};
 		.top-background-area {
 			width: 100%;
 			position: absolute;
