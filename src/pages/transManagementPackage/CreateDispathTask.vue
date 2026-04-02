@@ -2020,7 +2020,7 @@ export default {
           };
           .concat-box {
             width: 100%;
-            padding: 8px 6px 8px 16px;
+            padding: 10px 6px;
             box-sizing: border-box;
             background: #fff;
             display: flex;
@@ -2029,7 +2029,9 @@ export default {
             font-size: 14px;
             margin-top: 6px;
             .concat-box-left {
+              padding: 0 0 0 10px;
               width: 105px;
+              box-sizing: border-box;
               >span {
                 // &:nth-child(1) {
                 //   color: red

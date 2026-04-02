@@ -108,10 +108,31 @@ export const isWeiXin = () => {
 */
 
 export const getUrlParam = (code,search) => {
-  search = search ||  window.location.search.substr(1) || window.location.hash.split("?")[1];
-  let reg = new RegExp("(^|&)"+ code +"=([^&]*)(&|$)");
-  let r = search.match(reg);
-  if (r != null) return  unescape(r[2]); return null;
+  // 处理 search 字符串，兼容 hash 中的 query
+  if (!search) {
+    search = window.location.search.substring(1); // 替换 substr 为 substring
+    if (!search && window.location.hash) {
+        search = window.location.hash.split("?")[1];
+    }
+  }
+  
+  if (!search) return null;
+
+  // 构造正则，匹配 code=value
+  // 注意：这里假设 code 是安全的字符串，不包含正则特殊字符
+  const reg = new RegExp("(^|&)" + code + "=([^&]*)(&|$)", "i");
+  const r = search.match(reg);
+  
+  if (r != null) {
+    try {
+      // 使用 decodeURIComponent 替代 unescape，支持中文
+      return decodeURIComponent(r[2]);
+    } catch (e) {
+      // 如果解码失败（例如 % 后面格式不对），返回原始值
+      return r[2];
+    }
+  }
+  return null;
 }
 
 /*

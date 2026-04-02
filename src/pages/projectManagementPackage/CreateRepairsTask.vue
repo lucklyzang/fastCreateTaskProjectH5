@@ -1093,6 +1093,7 @@ export default {
           .concat-name-box {
             padding: 8px 6px 8px 16px;
             .concat-box-left {
+              width: 95px !important;
               >span {
                 &:nth-child(1) {
                   color: #9E9E9A !important;

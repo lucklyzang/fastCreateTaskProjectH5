@@ -149,6 +149,7 @@ export default {
         this.currentValue = this.list[0]['value'];
       } else {
         if (!this.triggerChanged) {
+          console.log('sa',this.list,this.pickerValues);
           this.currentId = this.list[Number(this.pickerValues)]['id'];
           this.currentText = this.list[Number(this.pickerValues)]['text'];
           this.currentValue = this.list[Number(this.pickerValues)]['value'];

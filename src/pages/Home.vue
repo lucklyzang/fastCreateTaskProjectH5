@@ -1,6 +1,6 @@
 <template>
 	<div class="content">
-		<van-overlay :show="overlayShow" z-index="100000" custom-style="{opacity:.6}"/>
+		<van-overlay :show="overlayShow" z-index="100000" />
 		<div class="top-background-area"></div>
 		<!-- 顶部标题 -->
 		<div class="topTabbar" :style="{ 'height': navigationBarHeight + 'px', 'lineHeight': navigationBarHeight + 'px'}">
@@ -73,7 +73,7 @@
 		beforeRouteEnter(to, from, next) {
 			if (from.path === '/') {
 				next((vm)=>{
-					vm.getCodeMessage()
+					// vm.getCodeMessage()
 				})
 			} else {
 				next()
@@ -91,14 +91,14 @@
 
 			// 通过扫码进入获取相关参数(项目id,科室id)
             getCodeMessage () {
-                if (window.location.href.indexOf("depId") != -1) {
+                if ((new RegExp('[?&]depId=')).test(window.location.href)) {
                     let depId = getUrlParam('depId');
 					if (depId === '' || depId === undefined || depId === null) {
 						// 取不到科室id,禁止后续操作
 						this.overlayShow = true;
 						this.$dialog.alert({
 							message: '请先扫描下单二维码',
-							closeOnPopstate: true,
+							closeOnPopstate: false,
 							showConfirmButton: false
 						}).then(() => {
 						})
@@ -110,19 +110,19 @@
 					this.overlayShow = true;
 					this.$dialog.alert({
 						message: '请先扫描下单二维码',
-						closeOnPopstate: true,
+						closeOnPopstate: false,
 						showConfirmButton: false
 					}).then(() => {
 					})
 				};
-                if (window.location.href.indexOf("proId") != -1) {
+                if ((new RegExp('[?&]proId=')).test(window.location.href)) {
                     let proId = getUrlParam('proId');
 					if (proId === '' || proId === undefined || proId === null) {
 						// 取不到项目id,禁止后续操作
 						this.overlayShow = true;
 						this.$dialog.alert({
 							message: '请先扫描下单二维码',
-							closeOnPopstate: true,
+							closeOnPopstate: false,
 							showConfirmButton: false
 						}).then(() => {
 						})
@@ -134,7 +134,7 @@
 					this.overlayShow = true;
 					this.$dialog.alert({
 						message: '请先扫描下单二维码',
-						closeOnPopstate: true,
+						closeOnPopstate: false,
 						showConfirmButton: false
 					}).then(() => {
 					})

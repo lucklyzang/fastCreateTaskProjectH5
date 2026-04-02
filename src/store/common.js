@@ -11,11 +11,11 @@ export default {
 			return state.templateType
 		},
 		depId:(state) => {
-			state.depId = getStore('depId') ? getStore('depId') : '';
+			state.depId = getStore('depId') ? getStore('depId') : 1658;
 			return state.depId
 		},
 		proId:(state) => {
-			state.proId = getStore('proId') ? getStore('proId') : '';
+			state.proId = getStore('proId') ? getStore('proId') : 7;
 			return state.proId
 		},
 		navigationBarHeight:(state) => {
