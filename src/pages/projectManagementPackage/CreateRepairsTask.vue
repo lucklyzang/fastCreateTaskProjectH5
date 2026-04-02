@@ -8,7 +8,7 @@
     </div>
     <!-- 目的房间 -->
     <div class="transport-rice-box" v-if="showGoalSpaces">
-			<ScrollSelection v-model="showGoalSpaces" :pickerValues="goalSpacesDefaultIndex" :columns="goalSpacesOption" title="目的房间" :currentSelectData="currentGoalSpaces" @sure="goalSpacesSureEvent" @cancel="goalSpacesCancelEvent" @close="goalSpacesCloseEvent" :isShowSearch="true" />
+			<ScrollSelection v-model="showGoalSpaces" :pickerValues="goalSpacesDefaultIndex" :columns="goalSpacesOption" title="目的房间" :currentSelectData="currentGoalSpaces" @sure="goalSpacesSureEvent" @cancel="goalSpacesCancelEvent" @search="goalSpacesSearchEvent" @close="goalSpacesCloseEvent" :isShowSearch="true" />
 		</div>
     <!-- 任务类型 -->
     <div class="transport-rice-box" v-if="showTaskType">
@@ -303,6 +303,7 @@ export default {
               this.goalSpacesOption.push({
                 text: res.data.data[i].spaceName,
                 value: res.data.data[i].id,
+                id: i,
                 selected: false
               })
             }
@@ -475,11 +476,12 @@ export default {
 
     // 目的房间下拉选择框确认事件
     goalSpacesSureEvent (val,value,id) {
-      if (val.length > 0) {
-        this.goalSpacesDefaultIndex = 0;
+      if (val) {
+        this.goalSpacesDefaultIndex = id;
         this.currentGoalSpaces =  val;
       } else {
-        this.currentGoalSpaces = '请选择'
+        this.currentGoalSpaces = '请选择';
+        this.goalSpacesDefaultIndex = 0;
       };
       this.showGoalSpaces = false
     },
@@ -487,6 +489,11 @@ export default {
     // 目的房间下拉选择框取消事件
     goalSpacesCancelEvent () {
       this.showGoalSpaces = false
+    },
+
+    // 目的房间下拉选择框搜索事件
+    goalSpacesSearchEvent () {
+      this.goalSpacesDefaultIndex = 0;
     },
     
     // 问题图片放大事件

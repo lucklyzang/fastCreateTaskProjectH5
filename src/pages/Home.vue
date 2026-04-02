@@ -73,7 +73,7 @@
 		beforeRouteEnter(to, from, next) {
 			if (from.path === '/') {
 				next((vm)=>{
-					// vm.getCodeMessage()
+					vm.getCodeMessage()
 				})
 			} else {
 				next()

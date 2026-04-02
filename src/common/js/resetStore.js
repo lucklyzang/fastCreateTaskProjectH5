@@ -15,8 +15,8 @@ export function getDefaultCommonState() {
 		// 生产环境：http://blinktech.cn
 		// 新测试环境  http://act.blinktech.cn/nblink
 		baseURL: 'http://ver.blinktech.cn',
-		depId: 36,
-		proId: 10
+		depId: '',
+		proId: ''
 	}
 }
 

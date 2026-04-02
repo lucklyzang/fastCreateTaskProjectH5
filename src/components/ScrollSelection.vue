@@ -117,8 +117,13 @@ export default {
     // 搜索事件
     onSearch(val) {
       this.isClickSearch = true;
-      this.list = this.cacheList.filter((item) => { return item.text.indexOf(this.searchValue) != -1});
-      this.showPicker()
+      if (this.searchValue === '') {
+        this.list = this.cacheList
+      } else {
+        this.list = this.cacheList.filter((item) => { return item.text.indexOf(this.searchValue) != -1});
+      };
+      this.$emit('search',this.searchValue,this.list);
+      this.showPicker();
     },
 
     // 重置事件
@@ -149,7 +154,6 @@ export default {
         this.currentValue = this.list[0]['value'];
       } else {
         if (!this.triggerChanged) {
-          console.log('sa',this.list,this.pickerValues);
           this.currentId = this.list[Number(this.pickerValues)]['id'];
           this.currentText = this.list[Number(this.pickerValues)]['text'];
           this.currentValue = this.list[Number(this.pickerValues)]['value'];

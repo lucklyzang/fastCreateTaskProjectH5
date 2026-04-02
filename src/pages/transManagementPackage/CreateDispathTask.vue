@@ -100,7 +100,7 @@
     </div>
     <!-- 终点科室(模板一单选) -->
     <div class="transport-rice-box" v-if="showEndDepartment">
-      <ScrollSelection :columns="endDepartmentList" :pickerValues="endDepartmentDefaultIndex" title="终点科室" @sure="endDepartmentSureEvent" @cancel="endDepartmentCancelEvent" @close="endDepartmentCloseEvent" :isShowSearch="true" />
+      <ScrollSelection :columns="endDepartmentList" :pickerValues="endDepartmentDefaultIndex" title="终点科室" @sure="endDepartmentSureEvent" @cancel="endDepartmentCancelEvent" @close="endDepartmentCloseEvent" @search="endDepartmentSearchEvent" :isShowSearch="true" />
     </div>
     <!-- 终点科室(模板二多选) -->
     <div class="transport-rice-box" v-if="showGoalSpaces">
@@ -1078,6 +1078,11 @@ export default {
     // 终点科室下拉选择框关闭事件(模板一)
     endDepartmentCloseEvent () {
       this.showEndDepartment = false
+    },
+
+    // 终点科室下拉选择框搜索事件(模板一)
+    endDepartmentSearchEvent () {
+      this.endDepartmentDefaultIndex = 0;
     },
 
     // 处理终点科室
