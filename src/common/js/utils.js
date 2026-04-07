@@ -107,45 +107,97 @@ export const isWeiXin = () => {
  * @param{String} code 指定参数名
 */
 
-export const getUrlParam = (code,search) => {
-  // 如果没有传入 search，则从当前地址栏获取
-  if (!search) {
-    // 优先取 search，如果没有，尝试取 hash 中的 query
-    search = window.location.search.substring(1);
-    if (!search && window.location.hash) {
-        // 尝试从 hash 中截取参数部分
-        const hashQuery = window.location.hash.split('?')[1];
-        if (hashQuery) search = hashQuery;
-    }
-  }
+// export const getUrlParam = (code,search) => {
+//   // 如果没有传入 search，则从当前地址栏获取
+//   if (!search) {
+//     // 优先取 search，如果没有，尝试取 hash 中的 query
+//     search = window.location.search.substring(1);
+//     if (!search && window.location.hash) {
+//         // 尝试从 hash 中截取参数部分
+//         const hashQuery = window.location.hash.split('?')[1];
+//         if (hashQuery) search = hashQuery;
+//     }
+//   }
   
-  // 【新增容错】如果 search 为空，但 href 中包含编码后的问号 %3F
-  // 这通常发生在二维码链接被整体编码的情况下
-  if (!search && window.location.href.includes('%3F')) {
-      // 尝试解码整个 href 并重新提取
-      try {
-          const fullUrl = decodeURIComponent(window.location.href);
-          const urlObj = new URL(fullUrl); // 如果浏览器支持 URL 对象
-          search = urlObj.search.substring(1) || urlObj.hash.split('?')[1];
-      } catch (e) {
-          // 如果解码失败， fallback 到原始逻辑
-      }
-  }
+//   // 【新增容错】如果 search 为空，但 href 中包含编码后的问号 %3F
+//   // 这通常发生在二维码链接被整体编码的情况下
+//   if (!search && window.location.href.includes('%3F')) {
+//       // 尝试解码整个 href 并重新提取
+//       try {
+//           const fullUrl = decodeURIComponent(window.location.href);
+//           const urlObj = new URL(fullUrl); // 如果浏览器支持 URL 对象
+//           search = urlObj.search.substring(1) || urlObj.hash.split('?')[1];
+//       } catch (e) {
+//           // 如果解码失败， fallback 到原始逻辑
+//       }
+//   }
 
-  if (!search) return null;
+//   if (!search) return null;
 
-  // 严格匹配：确保匹配的是 ?depId= 或 &depId=
-  const reg = new RegExp("(^|&)" + code + "=([^&]*)(&|$)");
-  const r = search.match(reg);
+//   // 严格匹配：确保匹配的是 ?depId= 或 &depId=
+//   const reg = new RegExp("(^|&)" + code + "=([^&]*)(&|$)");
+//   const r = search.match(reg);
   
-  if (r != null) {
-    try {
-      return decodeURIComponent(r[2]); // 使用 decodeURIComponent 处理中文
-    } catch (e) {
-      return r[2];
+//   if (r != null) {
+//     try {
+//       return decodeURIComponent(r[2]); // 使用 decodeURIComponent 处理中文
+//     } catch (e) {
+//       return r[2];
+//     }
+//   }
+//   return null;
+// }
+
+/**
+ * 获取扫描二维码后地址中指定的参数
+ * @param {String} key - 需要获取的参数名 (例如 'id', 'token')
+ * @param {String} urlStr - 可选。如果不传则默认解析当前浏览器地址栏；如果传了则解析指定字符串
+ * @returns {String|null} - 返回参数值，如果未找到则返回 null
+ */
+export const getUrlParam = (key, urlStr) =>{
+  try {
+    // 1. 确定要解析的字符串来源
+    // 如果没有传入 urlStr，默认获取当前浏览器地址栏的查询参数 (H5环境)
+    let searchStr = urlStr || window.location.search;
+
+    // 2. 处理微信小程序 scene 参数的特殊情况
+    // 如果传入的是 scene 字符串（通常没有 ? 开头，且可能包含路径），需要转换为标准查询字符串格式
+    if (!urlStr && searchStr.startsWith('?')) {
+        // 标准 URL 搜索字符串，不做处理
+    } else if (!searchStr.includes('?')) {
+        // 如果是类似 "id=123&name=test" 的纯参数串，前面加个 ?
+        searchStr = '?' + searchStr;
+    } else if (urlStr && !urlStr.startsWith('http')) {
+        // 兼容处理：如果是 path?query 格式，尝试提取 ? 后面的部分
+        const queryIndex = searchStr.indexOf('?');
+        if (queryIndex > -1) {
+            searchStr = searchStr.substring(queryIndex);
+        }
     }
+
+    // 3. 使用 URLSearchParams 进行解析 (现代浏览器标准做法)
+    // 为了兼容非 http 开头的相对路径，我们构造一个虚拟的 Base URL
+    const urlObj = new URL(searchStr, 'http://localhost');
+    const params = new URLSearchParams(urlObj.search);
+
+    // 4. 获取并解码参数
+    const value = params.get(key);
+
+    // 5. 如果 URLSearchParams 没拿到，且存在 Hash 路由的情况 (#?id=123)，尝试从 Hash 中查找
+    if (!value && !urlStr) {
+        const hash = window.location.hash;
+        if (hash && hash.includes('?')) {
+            const hashParams = new URLSearchParams(hash.split('?')[1]);
+            return hashParams.get(key);
+        }
+    }
+
+    return value;
+
+  } catch (e) {
+    console.error('参数解析错误:', e);
+    return null;
   }
-  return null;
 }
 
 /*

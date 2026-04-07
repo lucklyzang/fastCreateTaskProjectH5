@@ -96,7 +96,7 @@
     </div> -->
     <!-- 起点科室 -->
     <div class="transport-rice-box" v-if="showStartDepartment">
-      <ScrollSelection :columns="startDepartmentList" :pickerValues="startDepartmentDefaultIndex" title="起点科室" @sure="startDepartmentSureEvent" @cancel="startDepartmentCancelEvent" @close="startDepartmentCloseEvent" :isShowSearch="true"/>
+      <ScrollSelection :columns="startDepartmentList" :pickerValues="startDepartmentDefaultIndex" title="起点科室" @sure="startDepartmentSureEvent" @cancel="startDepartmentCancelEvent" @close="startDepartmentCloseEvent" @search="startDepartmentSearchEvent" :isShowSearch="true"/>
     </div>
     <!-- 终点科室(模板一单选) -->
     <div class="transport-rice-box" v-if="showEndDepartment">
@@ -181,9 +181,9 @@
               <span>*</span>
               <span>起点科室</span>
             </div>
-            <div class="select-box-right">
+            <div class="select-box-right" @click="showStartDepartment = true">
               <span>{{ currentStartDepartment }}</span>
-              <van-icon name="arrow" color="transparent" size="20" />
+              <van-icon name="arrow" color="#989999" size="20" />
             </div>
           </div>
           <div class="message-one is-back task-total" v-if="templateType === 'template_two'">
@@ -408,7 +408,7 @@ export default {
       transportPartentSelected: true,
       isContactisolationValue: null,
       showStartDepartment: false,
-      currentStartDepartment: '',
+      currentStartDepartment: '请选择',
       startDepartmentDefaultIndex: 0,
       startDepartmentList: [],
       showEndDepartment: false,
@@ -917,7 +917,7 @@ export default {
               }
             };
             // 为起点科室赋默认值
-		        this.currentStartDepartment = this.getDepartmentNameById(this.depId);
+		        // this.currentStartDepartment = this.getDepartmentNameById(this.depId);
           }
         })
         .catch((err) => {
@@ -1056,6 +1056,11 @@ export default {
     // 起点科室下拉选择框关闭事件
     startDepartmentCloseEvent () {
       this.showStartDepartment = false
+    },
+
+    // 起点科室下拉选择框搜索事件
+    startDepartmentSearchEvent () {
+      this.startDepartmentDefaultIndex = 0;
     },
 
     // 终点科室下拉选择框确认事件(模板一)
@@ -1337,7 +1342,7 @@ export default {
     sureEvent (flag) {
       if (this.templateType === 'template_one') {
         let taskMessage = {
-          setOutPlaceId: this.currentStartDepartment == '请选择' ? '' : this.depId, //出发地ID
+          setOutPlaceId: this.currentStartDepartment == '请选择' ? '' : this.getDepartmentIdByName(this.currentStartDepartment), //出发地ID
           setOutPlaceName: this.currentStartDepartment == '请选择' ? '' : this.currentStartDepartment,//出发地名称
           destinationId: this.currentEndDepartment == '请选择' ? '' : this.getDepartmentIdByName(this.currentEndDepartment), //目的地ID
           destinationName: this.currentEndDepartment == '请选择' ? '' : this.currentEndDepartment,  //目的地名称
