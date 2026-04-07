@@ -108,27 +108,40 @@ export const isWeiXin = () => {
 */
 
 export const getUrlParam = (code,search) => {
-  // 处理 search 字符串，兼容 hash 中的 query
+  // 如果没有传入 search，则从当前地址栏获取
   if (!search) {
-    search = window.location.search.substring(1); // 替换 substr 为 substring
+    // 优先取 search，如果没有，尝试取 hash 中的 query
+    search = window.location.search.substring(1);
     if (!search && window.location.hash) {
-        search = window.location.hash.split("?")[1];
+        // 尝试从 hash 中截取参数部分
+        const hashQuery = window.location.hash.split('?')[1];
+        if (hashQuery) search = hashQuery;
     }
   }
   
+  // 【新增容错】如果 search 为空，但 href 中包含编码后的问号 %3F
+  // 这通常发生在二维码链接被整体编码的情况下
+  if (!search && window.location.href.includes('%3F')) {
+      // 尝试解码整个 href 并重新提取
+      try {
+          const fullUrl = decodeURIComponent(window.location.href);
+          const urlObj = new URL(fullUrl); // 如果浏览器支持 URL 对象
+          search = urlObj.search.substring(1) || urlObj.hash.split('?')[1];
+      } catch (e) {
+          // 如果解码失败， fallback 到原始逻辑
+      }
+  }
+
   if (!search) return null;
 
-  // 构造正则，匹配 code=value
-  // 注意：这里假设 code 是安全的字符串，不包含正则特殊字符
-  const reg = new RegExp("(^|&)" + code + "=([^&]*)(&|$)", "i");
+  // 严格匹配：确保匹配的是 ?depId= 或 &depId=
+  const reg = new RegExp("(^|&)" + code + "=([^&]*)(&|$)");
   const r = search.match(reg);
   
   if (r != null) {
     try {
-      // 使用 decodeURIComponent 替代 unescape，支持中文
-      return decodeURIComponent(r[2]);
+      return decodeURIComponent(r[2]); // 使用 decodeURIComponent 处理中文
     } catch (e) {
-      // 如果解码失败（例如 % 后面格式不对），返回原始值
       return r[2];
     }
   }

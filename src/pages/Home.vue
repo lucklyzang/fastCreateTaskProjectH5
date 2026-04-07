@@ -91,53 +91,33 @@
 
 			// 通过扫码进入获取相关参数(项目id,科室id)
             getCodeMessage () {
-                if ((new RegExp('[?&]depId=')).test(window.location.href)) {
-                    let depId = getUrlParam('depId');
-					if (depId === '' || depId === undefined || depId === null) {
-						// 取不到科室id,禁止后续操作
-						this.overlayShow = true;
-						this.$dialog.alert({
-							message: '请先扫描下单二维码',
-							closeOnPopstate: false,
-							showConfirmButton: false
-						}).then(() => {
-						})
-					} else {
-						this.storeDepId(depId);
-					}
-                } else {
+				let depId = getUrlParam('depId');
+				if (depId === '' || depId === undefined || depId === null) {
 					// 取不到科室id,禁止后续操作
 					this.overlayShow = true;
-					this.$dialog.alert({
-						message: '请先扫描下单二维码',
-						closeOnPopstate: false,
-						showConfirmButton: false
-					}).then(() => {
-					})
-				};
-                if ((new RegExp('[?&]proId=')).test(window.location.href)) {
-                    let proId = getUrlParam('proId');
-					if (proId === '' || proId === undefined || proId === null) {
-						// 取不到项目id,禁止后续操作
-						this.overlayShow = true;
+					setTimeout(() => {
 						this.$dialog.alert({
 							message: '请先扫描下单二维码',
 							closeOnPopstate: false,
 							showConfirmButton: false
-						}).then(() => {
-						})
-					} else {
-						this.storeProId(proId);
-					}
-                } else {
+						}).catch(() => {}); // 捕获可能的中断错误
+					}, 200)
+				} else {
+					this.storeDepId(depId);
+				};
+				let proId = getUrlParam('proId');
+				if (proId === '' || proId === undefined || proId === null) {
 					// 取不到项目id,禁止后续操作
 					this.overlayShow = true;
-					this.$dialog.alert({
-						message: '请先扫描下单二维码',
-						closeOnPopstate: false,
-						showConfirmButton: false
-					}).then(() => {
-					})
+					setTimeout(() => {
+						this.$dialog.alert({
+							message: '请先扫描下单二维码',
+							closeOnPopstate: false,
+							showConfirmButton: false
+						}).catch(() => {}); // 捕获可能的中断错误
+					}, 200)
+				} else {
+					this.storeProId(proId);
 				}
             },
 			
