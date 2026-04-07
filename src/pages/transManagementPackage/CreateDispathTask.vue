@@ -850,25 +850,25 @@ export default {
             this.transporterList = [];
             let [item1,item2,item3,item4] = res;
             if (item1) {
-              Object.keys(item1).forEach((item,index) => {
+              item1.forEach((item,index) => {
                 // 起点科室
                 this.startDepartmentList.push({
-                  text: item1[item],
-                  value: item,
+                  text: item.departmentName,
+                  value: item.id,
                   id: index
                 });
                 if (this.templateType === 'template_one') {
                   // 终点科室(模板一)
                   this.endDepartmentList.push({
-                    text: item1[item],
-                    value: item,
+                    text: item.departmentName,
+                    value: item.id,
                     id: index
                   })
                 } else {
-                  // 终点科室(模板二)
+                  // 终点科id室(模板二)
                   this.goalSpacesOption.push({
-                    text: item1[item],
-                    value: item,
+                    text: item.departmentName,
+                    value: item.id,
                     selected: false
                   })
                 }

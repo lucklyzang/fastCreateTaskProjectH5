@@ -22,7 +22,7 @@ export function queryTransportTypeClass(data) {
 // 查询目的地(科室)
 export function queryAllDestination(proId) {
     return request({
-        url: `trans/department/dict/${proId}`,
+        url: `trans/department/dict-sort/${proId}`,
         method: 'get'
     })
 };
