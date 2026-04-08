@@ -97,7 +97,7 @@
 					this.overlayShow = true;
 					setTimeout(() => {
 						this.$dialog.alert({
-							message: '请先扫描下单二维码',
+							message: `depId${window.location.href}`,
 							closeOnPopstate: false,
 							showConfirmButton: false
 						}).catch(() => {}); // 捕获可能的中断错误
@@ -111,7 +111,7 @@
 					this.overlayShow = true;
 					setTimeout(() => {
 						this.$dialog.alert({
-							message: '请先扫描下单二维码',
+							message: `proId${window.location.href}`,
 							closeOnPopstate: false,
 							showConfirmButton: false
 						}).catch(() => {}); // 捕获可能的中断错误

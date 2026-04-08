@@ -4,7 +4,7 @@
     <van-overlay :show="overlayShow" z-index="100000" />
     <!-- 目的科室 -->
     <div class="transport-rice-box" v-if="showGoalDepartment">
-      <ScrollSelection :columns="goalDepartmentOption" :pickerValues="goalDepartmentDefaultIndex" title="目的科室" @sure="goalDepartmentSureEvent" @cancel="goalDepartmentCancelEvent" @close="goalDepartmentCloseEvent" :isShowSearch="true" />
+      <ScrollSelection :columns="goalDepartmentOption" :pickerValues="goalDepartmentDefaultIndex" title="目的科室" @sure="goalDepartmentSureEvent" @cancel="goalDepartmentCancelEvent" @close="goalDepartmentCloseEvent" @search="goalDepartmentSearchEvent" :isShowSearch="true" />
     </div>
     <!-- 目的房间 -->
     <div class="transport-rice-box" v-if="showGoalSpaces">
@@ -49,11 +49,12 @@
           </div>
           <div class="select-box end-select-box">
             <div class="select-box-left">
+              <!-- <span>*</span> -->
               <span>科室</span>
             </div>
-            <div class="select-box-right">
+            <div class="select-box-right" @click="showGoalDepartment = true">
               <span>{{ currentGoalDepartment }}</span>
-              <van-icon name="arrow" color="transparent" size="20" />
+              <van-icon name="arrow" color="#989999" size="20" />
             </div>
           </div>
           <div class="select-box end-select-box">
@@ -190,7 +191,7 @@ export default {
       goalDepartmentOption: [],
       showGoalDepartment: false,
       goalDepartmentDefaultIndex: 0,
-      currentGoalDepartment: '',
+      currentGoalDepartment: '请选择',
 
       goalSpacesOption: [],
       goalSpacesDefaultIndex: 0,
@@ -232,7 +233,7 @@ export default {
       })
     };
     this.parallelFunction();
-    this.getSpacesByDepartmentId(this.depId,false)
+    // this.getSpacesByDepartmentId(this.depId,false)
   },
 
   watch: {
@@ -356,7 +357,7 @@ export default {
               }
             };
             // 科室赋默认值
-		        this.currentGoalDepartment = this.getDepartmentNameById(this.depId);
+		        // this.currentGoalDepartment = this.getDepartmentNameById(this.depId);
           }
         })
         .catch((err) => {
@@ -431,7 +432,7 @@ export default {
     goalDepartmentSureEvent (val,value,id) {
       if (val) {
         this.currentGoalDepartment =  val;
-        this.currentGoalSpaces = [];
+        this.currentGoalSpaces = '请选择';
         this.goalDepartmentDefaultIndex = id;
         this.getSpacesByDepartmentId(this.goalDepartmentOption.filter((item) => { return item['text'] == this.currentGoalDepartment})[0]['value'],false)
       } else {
@@ -449,7 +450,10 @@ export default {
         this.getDepartmentByStructureId(this.structureOption.filter((item) => { return item['text'] == this.currentStructure})[0]['value'],true,false)
       }
     },
-
+    // 目的科室搜索事件
+    goalDepartmentSearchEvent () {
+      this.goalDepartmentDefaultIndex = 0;
+    },
     // 目的科室下拉选择框取消事件
     goalDepartmentCancelEvent () {
       this.showGoalDepartment = false
@@ -494,6 +498,11 @@ export default {
     // 目的房间下拉选择框搜索事件
     goalSpacesSearchEvent () {
       this.goalSpacesDefaultIndex = 0;
+    },
+
+    // 根据科室名称获取科室id
+    getDepartmentIdByName(text) {
+      return this.goalDepartmentOption.filter((item) => {return item['text'] == text })[0]['value']
     },
     
     // 问题图片放大事件
@@ -608,6 +617,11 @@ export default {
 
     // 确认事件(问题上报)
     sureEvent () {
+      // 科室不能为空
+      // if (this.currentGoalDepartment == '请选择') {
+      //   this.$toast('科室不能为空');
+      //   return
+      // };
       // 任务类型不能为空
       // if (this.currentTaskType == '请选择') {
       //   this.$toast('任务类型不能为空');
@@ -642,8 +656,8 @@ export default {
       let temporaryMessage = {
         	typeId: this.currentTaskType == '请选择' ? '' : this.taskTypeOption.filter((item) => { return item['text'] == this.currentTaskType})[0]['value'], // 任务类型id
 					typeName: this.currentTaskType == '请选择' ? '' : this.currentTaskType, // 任务类型名称
-					depName: this.currentGoalDepartment, //科室名称
-					depId: this.depId, // 目的科室id
+					depName: this.currentGoalDepartment == '请选择' ? '' : this.currentGoalDepartment, //科室名称
+					depId: this.currentGoalDepartment == '请选择' ? '' : this.getDepartmentIdByName(this.currentGoalDepartment), // 科室id
 					spaceId: this.currentGoalSpaces == '请选择' ? '' : this.goalSpacesOption.filter((item) => { return item['text'] == this.currentGoalSpaces})[0]['value'], //目的房间id
 					space: this.currentGoalSpaces == '请选择' ? '' : this.currentGoalSpaces, //目的房间名称
 					priority: this.priorityRadioValue,

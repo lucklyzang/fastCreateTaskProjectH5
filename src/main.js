@@ -90,4 +90,29 @@ new Vue({
     components: { App },
     created() {},
     template: '<App/>'
-})
+});
+(function fixHashParams() {
+    const hash = window.location.hash;
+    
+    // 检查 hash 是否包含 ? (例如: "#/?proId=7&depId=1658")
+    if (hash.includes('?')) {
+      // 1. 提取 ? 后面的参数部分
+      const paramsPart = hash.split('?')[1]; // 得到 "proId=7&depId=1658"
+      
+      if (paramsPart) {
+        // 2. 构造新的 URL：当前路径 + 标准查询参数 + 剩余的 hash 路径
+        // 假设 hash 格式为 "#/?params.../actualPath"，我们需要保留 /actualPath
+        const actualHashPath = hash.includes('/?') ? hash.split('/?')[1].replace(paramsPart, '') : '/';
+        
+        // 3. 拼接新 URL
+        // 注意：这里需要确保不要产生死循环，可以加一个标记
+        const newUrl = window.location.origin + 
+                       window.location.pathname + 
+                       '?' + paramsPart + 
+                       '#/' + actualHashPath;
+        
+        // 4. 替换当前 URL，不产生历史记录
+        window.location.replace(newUrl);
+      }
+    }
+  })();
