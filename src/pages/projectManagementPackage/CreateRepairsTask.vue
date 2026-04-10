@@ -47,9 +47,9 @@
               </van-radio-group>
             </div>
           </div>
-          <div class="select-box end-select-box">
+          <div class="select-box">
             <div class="select-box-left">
-              <!-- <span>*</span> -->
+              <span>*</span>
               <span>科室</span>
             </div>
             <div class="select-box-right" @click="showGoalDepartment = true">
@@ -618,10 +618,10 @@ export default {
     // 确认事件(问题上报)
     sureEvent () {
       // 科室不能为空
-      // if (this.currentGoalDepartment == '请选择') {
-      //   this.$toast('科室不能为空');
-      //   return
-      // };
+      if (this.currentGoalDepartment == '请选择') {
+        this.$toast('科室不能为空');
+        return
+      };
       // 任务类型不能为空
       // if (this.currentTaskType == '请选择') {
       //   this.$toast('任务类型不能为空');
